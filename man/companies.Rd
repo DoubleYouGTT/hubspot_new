@@ -8,10 +8,12 @@
 hs_companies_raw(
   token_path = hubspot_token_get(),
   apikey = hubspot_key_get(),
-  properties = hs_company_properties_tidy(hs_company_properties_raw(token_path, apikey)),
+  properties = hs_company_properties_tidy(hs_company_properties_raw(token_path,
+    apikey)),
   property_history = "true",
   max_iter = 10,
-  max_properties = 100
+  max_properties = 100,
+  offsetvalue = 0
 )
 
 hs_companies_tidy(companies = hs_companies_raw(), view = c("properties"))
@@ -33,6 +35,8 @@ limit how many pages of data will get returned}
 
 \item{max_properties}{Avoid URLs that are too long, limit the number of
 properties returned, if required.}
+
+\item{offsetvalue}{The offset value to use if continuing a previous call. Defaults to 0.}
 
 \item{companies}{A companies return from \code{hs_companies_raw()}}
 

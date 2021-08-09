@@ -9,6 +9,7 @@
 #' @template associations
 #' @template max_iter
 #' @template max_properties
+#' @template offsetvalue
 #'
 #' @return List with deals data (`hs_deals_raw()`)
 #' @export
@@ -35,7 +36,8 @@ hs_deals_raw <- function(token_path = hubspot_token_get(),
                       property_history = "true",
                       associations = "true",
                       max_iter = 10,
-                      max_properties = 100) {
+                      max_properties = 100,
+                      offsetvalue = 0) {
   query <- c(
     list(
       limit = 250,
@@ -58,7 +60,8 @@ hs_deals_raw <- function(token_path = hubspot_token_get(),
     max_iter = max_iter, query = query,
     token_path = token_path,
     apikey = apikey, element = "deals",
-    hasmore_name = "hasMore"
+    hasmore_name = "hasMore",
+    offset_initial = offsetvalue
   )
 
   deals <- purrr::set_names(

@@ -10,6 +10,7 @@
 #' @template list_memberships
 #' @template max_iter
 #' @template max_properties
+#' @template offsetvalue
 #'
 #' @return List with contact data (`hs_contacts_raw()`)
 #' @export
@@ -36,7 +37,8 @@ hs_contacts_raw <- function(token_path = hubspot_token_get(),
                          form_submission_mode = "newest",
                          list_memberships = "false",
                          max_iter = 10,
-                         max_properties = 100) {
+                         max_properties = 100,
+                         offsetvalue = 0) {
   form_submission_mode <- match.arg(
     form_submission_mode,
     c("all", "none", "newest", "oldest")
@@ -68,7 +70,8 @@ hs_contacts_raw <- function(token_path = hubspot_token_get(),
     apikey = apikey, element = "contacts",
     hasmore_name = "has-more",
     offset_name_in = "vidOffset",
-    offset_name_out = "vid-offset"
+    offset_name_out = "vid-offset",
+    offset_initial = offsetvalue
   )
 
   purrr::set_names(

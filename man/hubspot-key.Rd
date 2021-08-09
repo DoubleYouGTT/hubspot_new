@@ -49,8 +49,7 @@ requests every 10 seconds) but there’s also a daily limit on calls.\if{html}{\
 }\if{html}{\out{</div>}}
 
 \strong{For a more secure authorization method, without a daily limit on
-calls, see
-\code{\link[=hubspot_token_create]{hubspot_token_create()}}.}
+calls, see \code{\link[=hubspot_token_create]{hubspot_token_create()}}.}
 
 \subsection{Authorization for Hubspot APIs}{
 

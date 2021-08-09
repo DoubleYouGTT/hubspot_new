@@ -67,17 +67,19 @@ get_results <- ratelimitr::limit_rate(
 #'                     endpoint (character)
 #' @param offset_name_in Name of the offset parameter to send to the API
 #' @param offset_name_out Name of the offset parameter returned
+#' @param offset_initial Initial offset value for the offset parameter
 #' @return A list
 #' @noRd
 get_results_paged <- function(path, token_path, apikey, query = NULL,
                               max_iter = max_iter, element,
-                              hasmore_name,
+                              hasmore_name = "hasMore",
                               offset_name_in = "offset",
-                              offset_name_out = "offset") {
+                              offset_name_out = "offset",
+                              offset_initial = 0) {
   results <- list()
   n <- 0
   do <- TRUE
-  offset <- 0
+  offset <- offset_initial
 
   while (do & n < max_iter) {
     query[[offset_name_in]] <- offset

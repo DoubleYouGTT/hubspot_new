@@ -4,16 +4,17 @@
 \name{hubspot-package}
 \alias{hubspot}
 \alias{hubspot-package}
-\title{hubspot: Work with Hubspot data}
+\title{hubspot}
 \description{
-Utilising the 'Hubspot CRM' API (see <https://developers.hubspot.com/docs>
-    for more information), retrieve customer relationship data for reporting and analysis.
+Utilizing the \href{https://developers.hubspot.com/docs}{'Hubspot CRM' API} to
+retrieve customer relationship data for reporting and analysis.
 }
 \author{
-\strong{Maintainer}: Steph Locke \email{steph@itsalocke.com}
+\strong{Maintainer}: Joost Kuckartz \email{jkuckartz1984@hotmail.com} [copyright holder]
 
 Authors:
 \itemize{
+  \item Steph Locke \email{steph@itsalocke.com} [copyright holder]
   \item Maëlle Salmon \email{maelle.salmon@yahoo.se} (\href{https://orcid.org/0000-0002-2815-0399}{ORCID})
 }
 
@@ -25,4 +26,3 @@ Other contributors:
 }
 
 }
-\keyword{internal}

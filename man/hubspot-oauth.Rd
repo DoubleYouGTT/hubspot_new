@@ -56,20 +56,14 @@ To BYOA,
 \item \href{https://developers.hubspot.com/docs/faq/how-do-i-create-an-app-in-hubspot}{Read and execute Hubspot’s docs about how to create an app}.
 You’ll need to create a Hubspot developer account.
 \item Define the \code{app_info} list.
-}\if{html}{\out{
-<!-- end list -->
-}}
-\if{html}{\out{<div class="r">}}\preformatted{my_very_own_app <- list(client_secret = <CLIENTSECRET>,
+}\if{html}{\out{<div class="r">}}\preformatted{my_very_own_app <- list(client_secret = <CLIENTSECRET>,
        client_id = <CLIENTID>,
        app_id = <APPID>,
        scope = c(<"scope1", "scope2", etc>))
 }\if{html}{\out{</div>}}
 \itemize{
 \item Pass the app info to \code{hubspot_token_create()}
-}\if{html}{\out{
-<!-- end list -->
-}}
-\if{html}{\out{<div class="r">}}\preformatted{hubspot_token_create(app_info = my_very_own_app)
+}\if{html}{\out{<div class="r">}}\preformatted{hubspot_token_create(app_info = my_very_own_app)
 }\if{html}{\out{</div>}}
 
 To distribute your app across your projects or across team members, you

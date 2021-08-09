@@ -12,7 +12,8 @@ hs_deals_raw(
   property_history = "true",
   associations = "true",
   max_iter = 10,
-  max_properties = 100
+  max_properties = 100,
+  offsetvalue = 0
 )
 
 hs_deals_tidy(
@@ -39,6 +40,8 @@ limit how many pages of data will get returned}
 
 \item{max_properties}{Avoid URLs that are too long, limit the number of
 properties returned, if required.}
+
+\item{offsetvalue}{The offset value to use if continuing a previous call. Defaults to 0.}
 
 \item{deals}{A deals list object, typically produced by running \code{hs_deals_raw}}
 

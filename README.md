@@ -3,37 +3,50 @@
 
 # hubspot
 
-> Access Hubspot CRM data in R
+> Access Hubspot CRM data in R.
 
 <!-- badges: start -->
-
 [![Project Status: WIP - Initial development is in progress, but there
 has not yet been a stable, usable release suitable for the
 public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
-[![Travis build
-status](https://travis-ci.org/lockedata/hubspot.svg?branch=master)](https://travis-ci.org/lockedata/hubspot)
-[![Locke Data
-Slack](https://img.shields.io/badge/Slack-discuss-blue.svg?logo=slack&longCache=true&style=flat)](https://join.slack.com/t/lockedata/shared_invite/enQtMjkwNjY3ODkwMzg2LTI1OGU1NTM3ZGIyZGFiNTdlODI3MzU2N2ZlNDczMjM4M2U2OWVmNDMzZTQ1ZGNlZDQ3MGM2MGVjMjI2MWIyMjI)
-[![Codecov test
-coverage](https://codecov.io/gh/lockedata/hubspot/branch/master/graph/badge.svg)](https://codecov.io/gh/lockedata/hubspot?branch=master)
 <!-- badges: end -->
 
 The goal of `hubspot` is to enable access to [Hubspot
 CRM](//hubspot.com) data. It uses the [Hubspot
-API](developers.hubspot.com/docs/overview).
+API](//legacydocs.hubspot.com/docs/overview).
 
-All functions are named following a
-`hs_<endpointname>_raw()`/`hs_<endpointname>_tidy()`, with
-`hs_<endpointname>_tidy()` offering at least one view: e.g. get a nested
-list of deals data with `hs_deals_raw()` and transform it to a tibble of
-associations, properties history, properties or stages history using
-`hs_deals_tidy()`.
+> Updated version
 
-Refer to the [online reference](https://itsalocke.com/hubspot/reference)
-to see what endpoints are supported at the moment. Feel free to suggest
-new “getters” (`hs_<endpointname>_raw()`) and tidier options (`view` of
-`hs_<endpointname>_tidy()`) in the [issue
-tracker](https://github.com/lockedata/hubspot/issues).
+The [orginal hubspot package by lockedata](https://github.com/lockedata/hubspot) hasn't been updated for long. Since then, HubSpot has made new endpoints. This package hopes to provide extended functionality while following the same naming conventions and keeping the original functions.
+
+> Function overview 
+
+All functions are named following the
+`hs_<endpointname>_raw()`/`hs_<endpointname>_tidy()` structure. The `_raw()` functions return lists based on the JSON
+structure of the HubSpot API, while the `_tidy()` functions return a tibble offering at least one view.
+
+For example, a nested list of deals data can be obtained with `hs_deals_raw()` and be transformed to a tibble of
+associations, properties history, properties or stages history with `hs_deals_tidy()`.
+
+A full list of all functions and their parameters can be found in the "[hubspot.pdf](hubspot.pdf)" file. The functions currently support the following `GET` endpoints:
+- API usage
+- Companies
+- Company properties
+- Contacts
+- Contact lists
+- Contact properties
+- Deals
+- Deal pipelines
+- Deal properties
+- Engagements
+- Forms
+- Line items
+- Object properties (for tickets, products, and line items)
+- Owners
+- Products
+- Tickets
+
+The package has no functionality (yet) to update information in HubSpot (`POST` and `PUT`).
 
 ## Example
 
@@ -1062,7 +1075,7 @@ deal_stages
 ## Installation
 
 ``` r
-remotes::install_github("lockedata/hubspot")
+remotes::install_github("DoubleYouGTT/hubspot")
 ```
 
 ## Authorization for Hubspot APIs
@@ -1074,7 +1087,7 @@ The Hubspot API accepts authorization via
   - OAuth 2.0.
 
 OAuth 2.0 is the [recommended
-method](https://developers.hubspot.com/docs/methods/auth/oauth-overview?_ga=2.108539650.1064389456.1574673541-1134397846.1571640267).
+method](https://legacydocs.hubspot.com/docs/methods/auth/oauth-overview).
 However, this package supports both.
 
 Note that if you do nothing the package will use the “demo” API token
@@ -1093,14 +1106,13 @@ via `hubspot_token_create()`, priority will be given to using the OAuth
 2.0 token. If you don’t want that, explicitely pass `NULL` as value for
 the `token_path` argument of all functions.
 
-Find more details on each method [in the vignette about
+Find more details on each method [in lockedata's vignette about
 authorization](https://itsalocke.com/hubspot/articles/auth).
 
 ## Contributions welcome\!
 
-Wanna report a bug or suggest a feature? Great stuff\! For more
-information on how to contribute check out [our contributing
-guide](.github/CONTRIBUTING.md).
+If you like to report a bug or suggest a feature, feel free to submit an
+issue at the [issue tab](https://github.com/DoubleYouGTT/hubspot/issues).
 
 Please note that this project is released with a [Contributor Code of
 Conduct](CONDUCT.md). By participating in this project you agree to

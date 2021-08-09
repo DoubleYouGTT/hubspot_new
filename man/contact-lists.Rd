@@ -8,7 +8,8 @@
 hs_contact_lists_raw(
   token_path = hubspot_token_get(),
   apikey = hubspot_key_get(),
-  max_iter = 10
+  max_iter = 10,
+  offsetvalue = 0
 )
 
 hs_contact_lists_tidy(
@@ -25,6 +26,8 @@ is \code{NULL}). See \code{\link[=hubspot_key_set]{hubspot_key_set()}}.}
 
 \item{max_iter}{The API is limited to a certain number of responses by page, use \code{max_iter} to
 limit how many pages of data will get returned}
+
+\item{offsetvalue}{The offset value to use if continuing a previous call. Defaults to 0.}
 
 \item{contact_lists}{A contact lists return from \code{hs_contact_lists_raw()}}
 

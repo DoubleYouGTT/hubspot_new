@@ -1,3 +1,11 @@
+# updates from master
+Differences from [Hubspot
+CRM](//hubspot.com)
+
+* Removed all deprecated functions
+
+* Added line items, products, and tickets endpoints
+
 # hubspot dev
 
 * Renamed all functions following a `hs_<endpointname>_raw()`/`hs_<endpointname>_tidy()`

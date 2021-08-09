@@ -8,7 +8,8 @@
 #' @template property_history
 #' @template max_iter
 #' @template max_properties
-#'
+#' @template offsetvalue
+#' 
 #' @return List with company data (`hs_companies_raw()`)
 #' @rdname companies
 #' @export
@@ -32,7 +33,8 @@ hs_companies_raw <- function(token_path = hubspot_token_get(),
                           )),
                           property_history = "true",
                           max_iter = 10,
-                          max_properties = 100) {
+                          max_properties = 100,
+                          offsetvalue = 0) {
   properties <- head(properties, max_properties)
 
   query <- c(
@@ -56,7 +58,8 @@ hs_companies_raw <- function(token_path = hubspot_token_get(),
     max_iter = max_iter, query = query,
     token_path = token_path,
     apikey = apikey, element = "companies",
-    hasmore_name = "has-more"
+    hasmore_name = "has-more",
+    offset_initial = offsetvalue
   )
 
   companies <- purrr::set_names(

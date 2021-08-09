@@ -1,10 +1,15 @@
 Package: hubspot
-Title: Work with Hubspot data
-Version: 0.0.2.999
+Title: Work with HubSpot data
+Version: 0.3.2
+Date: 2021-08-06
 Authors@R: 
-    c(person(given = "Steph",
+    c(person(given = "Joost",
+             family = "Kuckartz",
+             role = c("aut", "cph", "cre"),
+             email = "jkuckartz1984@hotmail.com"),
+      person(given = "Steph",
              family = "Locke",
-             role = c("aut", "cre"),
+             role = c("aut", "cph"),
              email = "steph@itsalocke.com"),
       person(given = "Jessie",
              family = "Geahlen",
@@ -18,28 +23,25 @@ Authors@R:
              role = "aut",
              email = "maelle.salmon@yahoo.se",
              comment = c(ORCID = "0000-0002-2815-0399")),
-       person("Michael W.", "Kearney", ,
-      email = "kearneymw@missouri.edu", role = c("ctb"),
-      comment = c(ORCID = "0000-0002-0730-4694")))
-Description: Utilising the 'Hubspot CRM' API (see <https://developers.hubspot.com/docs>
-    for more information), retrieve customer relationship data for reporting and analysis.
-License: MIT + file LICENSE
+      person(given = "Michael W.",
+             family = "Kearney",
+             role = "ctb",
+             email = "kearneymw@missouri.edu",
+             comment = c(ORCID = "0000-0002-0730-4694")))
+Description: Utilising the 'Hubspot CRM' API (see
+    <https://developers.hubspot.com/docs> for more information), retrieve
+    customer relationship data for reporting and analysis.
+License: MIT+ file LICENSE
+Depends: 
+    R (>= 4.1.0)
 Encoding: UTF-8
 LazyData: true
-Suggests: 
-    testthat (>= 2.1.0),
-    knitr,
-    rmarkdown,
-    vcr,
-    covr,
-    styler,
-    pkgload,
-    details
-VignetteBuilder: knitr
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
 Imports: 
-    purrr,
-    dplyr,
     httr,
+    dplyr,
+    purrr,
     magrittr,
     tidyr,
     rlang,
@@ -50,5 +52,9 @@ Imports:
     memoise,
     ratelimitr,
     glue
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.0.2
+Suggests: 
+    rmarkdown,
+    knitr,
+    testthat (>= 2.1.0),
+    covr,
+    pkgload

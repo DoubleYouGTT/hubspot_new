@@ -3,12 +3,13 @@
 \name{hs_engagements_raw}
 \alias{hs_engagements_raw}
 \alias{hs_engagements_tidy}
-\title{WIP - Get all engagements (raw and tidy)}
+\title{Engagements endpoint (raw and tidy)}
 \usage{
 hs_engagements_raw(
   token_path = hubspot_token_get(),
   apikey = hubspot_key_get(),
-  max_iter = 10
+  max_iter = 10,
+  offsetvalue = 0
 )
 
 hs_engagements_tidy(engagements = hs_engagements_raw(), view = "id")
@@ -23,7 +24,9 @@ is \code{NULL}). See \code{\link[=hubspot_key_set]{hubspot_key_set()}}.}
 \item{max_iter}{The API is limited to a certain number of responses by page, use \code{max_iter} to
 limit how many pages of data will get returned}
 
-\item{engagements}{An engagements object, typically produced by running \code{hs_engagements_raw()}}
+\item{offsetvalue}{The offset value to use if continuing a previous call. Defaults to 0.}
+
+\item{engagements}{An engagements return from \code{hs_engagements_raw()}}
 
 \item{view}{A view (see Details)}
 }
@@ -33,7 +36,7 @@ A list (\code{hs_engagements_raw()})
 A tibble with associated entities (\code{hs_engagements_tidy()})
 }
 \description{
-Get all of the engagements in a portal.  Returns a paginated set of engagements. from the \href{https://developers.hubspot.com/docs/methods/engagements/get-all-engagements}{Get all engagements endpoint}.
+Get all of the engagements in a portal.  Returns a paginated set of engagements. from the \href{https://legacydocs.hubspot.com/docs/methods/engagements/get-all-engagements}{Get all engagements endpoint}.
 }
 \details{
 Required scope(s) for the OAuth token: contacts.

@@ -5,6 +5,7 @@
 #' @template token_path
 #' @template apikey
 #' @template max_iter
+#' @template offsetvalue
 #'
 #' @return List of contact lists (`hs_contact_lists_raw()`)
 #' @rdname contact-lists
@@ -16,7 +17,8 @@
 #' @export
 hs_contact_lists_raw <- function(token_path = hubspot_token_get(),
                                  apikey = hubspot_key_get(),
-                                 max_iter = 10) {
+                                 max_iter = 10,
+                                 offsetvalue = 0) {
   query <- list(
       count = 250
       )
@@ -28,7 +30,8 @@ hs_contact_lists_raw <- function(token_path = hubspot_token_get(),
     apikey = apikey, element = "lists",
     hasmore_name = "has-more",
     offset_name_in = "offset",
-    offset_name_out = "offset"
+    offset_name_out = "offset",
+    offset_initial = offsetvalue
   )
 
   purrr::set_names(

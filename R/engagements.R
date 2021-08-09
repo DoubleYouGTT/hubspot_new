@@ -1,11 +1,12 @@
-#' WIP - Get all engagements (raw and tidy)
+#' Engagements endpoint (raw and tidy)
 #'
-#' @description Get all of the engagements in a portal.  Returns a paginated set of engagements. from the [Get all engagements endpoint](https://developers.hubspot.com/docs/methods/engagements/get-all-engagements).
+#' @description Get all of the engagements in a portal.  Returns a paginated set of engagements. from the [Get all engagements endpoint](https://legacydocs.hubspot.com/docs/methods/engagements/get-all-engagements).
 #' @details Required scope(s) for the OAuth token: contacts.
 #'
 #' @template token_path
 #' @template apikey
 #' @template max_iter
+#' @template offsetvalue
 #'
 #' @return A list (`hs_engagements_raw()`)
 #' @rdname engagements
@@ -19,7 +20,8 @@
 
 hs_engagements_raw <- function(token_path = hubspot_token_get(),
                                apikey = hubspot_key_get(),
-                               max_iter = 10) {
+                               max_iter = 10,
+                               offsetvalue = 0) {
   path <- "/engagements/v1/engagements/paged"
   query <- list(
     count = 250
@@ -32,9 +34,7 @@ hs_engagements_raw <- function(token_path = hubspot_token_get(),
     query = query,
     max_iter = max_iter,
     element = "results",
-    hasmore_name = "hasMore",
-    offset_name_in = "offset",
-    offset_name_out = "offset"
+    offset_initial = offsetvalue
   )
 
   purrr::set_names(
