@@ -8,8 +8,8 @@
 hs_lineitems_raw(
   token_path = hubspot_token_get(),
   apikey = hubspot_key_get(),
-  properties = hs_object_properties_tidy(hs_object_properties_raw("line_items",
-    token_path = token_path, apikey = apikey)),
+  properties = hs_object_properties_tidy("line_items",
+    hs_object_properties_raw("line_items", token_path = token_path, apikey = apikey)),
   property_history = "true",
   max_iter = 10,
   max_properties = 100,

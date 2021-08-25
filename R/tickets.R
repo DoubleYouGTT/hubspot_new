@@ -24,7 +24,7 @@
 #' )
 hs_tickets_raw <- function(token_path = hubspot_token_get(),
                          apikey = hubspot_key_get(),
-                         properties = hs_object_properties_tidy(
+                         properties = hs_object_properties_tidy("tickets",
                            hs_object_properties_raw("tickets",
                            token_path = token_path,
                            apikey = apikey

@@ -24,7 +24,7 @@
 #' )
 hs_lineitems_raw <- function(token_path = hubspot_token_get(),
                          apikey = hubspot_key_get(),
-                         properties = hs_object_properties_tidy(
+                         properties = hs_object_properties_tidy("line_items",
                            hs_object_properties_raw("line_items",
                            token_path = token_path,
                            apikey = apikey

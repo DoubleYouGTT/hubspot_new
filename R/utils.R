@@ -18,10 +18,11 @@ get_path_url <- function(path) {
 #' @param apikey API key (character)
 #' @param token_path Path to cached token (character)
 #' @param query Query parameters (named list)
-#' @return A list
+#' @param element Element to retrieve from API raw results (character)
+#' @return A list with the content, \code{NULL} on error 404, \code{NA} on error 500.
 #' @noRd
 .get_results <- function(path, apikey, token_path,
-                         query = NULL) {
+                         query = NULL, element = NULL) {
   auth <- hubspot_auth(
     token_path = token_path,
     apikey = apikey
@@ -35,7 +36,7 @@ get_path_url <- function(path) {
     query$hapikey <- auth$value
     res <- httr::GET(get_path_url(path),
       query = query,
-      httr::user_agent("hubspot R package by Locke Data")
+      httr::user_agent("hubspot R package by DoubleYoUGTT")
     )
   } else {
     token <- readRDS(auth$value)
@@ -44,13 +45,22 @@ get_path_url <- function(path) {
 
     res <- httr::GET(get_path_url(path),
       query = query,
-      httr::config(httr::user_agent("hubspot R package by Locke Data"),
+      httr::config(httr::user_agent("hubspot R package by DoubleYoUGTT"),
         token = token
       )
     )
   }
   httr::warn_for_status(res)
-  res %>% httr::content()
+  if (res$status_code==404) {
+    return(NULL)
+  } else if (res$status_code==500) {
+    return(NA)
+  }
+  res=httr::content(res)
+  if (!is.null(element)) {
+    res=res[[element]]
+  }
+  return(res)
 }
 
 get_results <- ratelimitr::limit_rate(
@@ -80,28 +90,87 @@ get_results_paged <- function(path, token_path, apikey, query = NULL,
   n <- 0
   do <- TRUE
   offset <- offset_initial
-
+  
   while (do & n < max_iter) {
     query[[offset_name_in]] <- offset
-
+    
     res_content <- get_results(
       path = path,
       token_path = token_path,
       apikey = apikey,
       query = query
     )
-    n <- n + 1
-
-    results[n] <- list(res_content[[element]])
-    do <- res_content[[hasmore_name]]
-    offset <- res_content[[offset_name_out]]
+    if (!is.null(res_content)) {                  #can't access data when no content returned
+      if (!is.na(res_content[1])) {
+        n <- n + 1
+        
+        results[n] <- list(res_content[[element]])
+        do <- res_content[[hasmore_name]]
+        offset <- res_content[[offset_name_out]]
+        
+        if (is.null(do))
+          do=FALSE
+      } else {
+        message("Retrying after server error...")
+      }
+    } else {
+      do=FALSE                                    #break loop on error 404
+    }
   }
-
+  
   results <- purrr::flatten(results)
-
+  
   return(results)
 }
 
+#' @param path API endpoint path (character)
+#' @param apikey API key (character)
+#' @param token_path Path to cached token (character)
+#' @param body Query parameters (named list)
+#' @param sendfunction Pointer to the httr function to use (POST, PUT, or PATCH)
+#' @return A list
+#' @noRd
+.send_results <- function(path, apikey, token_path,
+                          body = NULL, sendfunction=httr::POST) {
+  auth <- hubspot_auth(
+    token_path = token_path,
+    apikey = apikey
+  )
+  
+  # remove NULL elements from the body
+  body <- purrr::discard(body, is.null)
+  
+  # auth
+  if (auth$auth == "key") {
+    query=list()
+    query$hapikey <- auth$value   
+    res <- sendfunction(get_path_url(path),
+                        query = query,
+                        body = body,
+                        encode = "json",
+                        httr::user_agent("hubspot R package by DoubleYouGTT")
+    )
+  } else {
+    token <- readRDS(auth$value)
+    
+    token <- check_token(token, file = auth$value)
+    
+    res <- sendfunction(get_path_url(path),
+                        body = body,
+                        encode = "json",
+                        httr::config(httr::user_agent("hubspot R package by DoubleYouGTT"),
+                                     token = token
+                        )
+    )
+  }
+  httr::warn_for_status(res)
+  res %>% httr::content()
+}
+
+send_results <- ratelimitr::limit_rate(
+  .send_results,
+  ratelimitr::rate(100, 10)
+)
 
 check_token <- function(token, file) {
   info <- httr::GET(get_path_url(

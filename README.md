@@ -11,24 +11,32 @@ has not yet been a stable, usable release suitable for the
 public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 <!-- badges: end -->
 
-The goal of `hubspot` is to enable access to [Hubspot
-CRM](//hubspot.com) data. It uses the [Hubspot
-API](//legacydocs.hubspot.com/docs/overview).
+The goal of `hubspot` is to enable access to [Hubspot CRM](//hubspot.com) data. It uses the [HubSpot API v3](//developers.hubspot.com/docs/api/crm/understanding-the-crm) and the [Hubspot legacy API v1](//legacydocs.hubspot.com/docs/overview).
 
-> Updated version
+## Updated version
 
-The [orginal hubspot package by lockedata](https://github.com/lockedata/hubspot) hasn't been updated for long. Since then, HubSpot has made new endpoints. This package hopes to provide extended functionality while following the same naming conventions and keeping the original functions.
+The [orginal hubspot package by lockedata](https://github.com/lockedata/hubspot) hasn't been updated for long and only used `GET` connections. Since then, HubSpot has made a new API and new functionality. This package provides extended functionality while following the same naming conventions and keeping the original functions.
 
-> Function overview 
+## Function overview 
 
-All functions are named following the
-`hs_<endpointname>_raw()`/`hs_<endpointname>_tidy()` structure. The `_raw()` functions return lists based on the JSON
-structure of the HubSpot API, while the `_tidy()` functions return a tibble offering at least one view.
+The original (legacy API) functions are named following the
+`hs_<endpointname>_raw()`/`hs_<endpointname>_tidy()` structure. The `_raw()` functions return lists based on the JSON structure of the HubSpot API, while the `_tidy()` functions return a tibble offering at least one view.
 
-For example, a nested list of deals data can be obtained with `hs_deals_raw()` and be transformed to a tibble of
-associations, properties history, properties or stages history with `hs_deals_tidy()`.
+> For example, a nested list of deals data can be obtained with `hs_deals_raw()` and be transformed to a tibble of associations, properties history, properties or stages history with `hs_deals_tidy()`.
 
-A full list of all functions and their parameters can be found in the "[hubspot.pdf](hubspot.pdf)" file. The functions currently support the following `GET` endpoints:
+The new (API v3) functions are named following the `hs_<action>_<endpoint>_<type>()` structure. They all return raw lists based on the JSON structure of the HubSpot API. The following functions exist:
+- `hs_get_<endpoint>_list()`: obtain a full list of objects
+- `hs_create_<endpoint>()`: create one or more objects
+- `hs_get_<endpoint>()`: obtain one or more objects based on the identifiers
+- `hs_update_<endpoint>()`: update one or more objects
+- `hs_delete_<endpoint>()`: delete one or more objects
+- `hs_get_<endpoint>_association()`: get all associations of a specific type for one object
+- `hs_create_<endpoint>_association()`: create one association between the object and another
+- `hs_delete_<endpoint>_association()`: delete one association between the object and another
+
+> For example, a nested list of products data can be obtained with `hs_get_product_list()`, but also with `hs_get_product()` if identifiers are known.
+
+A full list of all functions and their parameters can be found in the "[hubspot.pdf](hubspot.pdf)" file. The package currently support the following `GET` endpoints of the legacy API v1:
 - API usage
 - Companies
 - Company properties
@@ -46,7 +54,9 @@ A full list of all functions and their parameters can be found in the "[hubspot.
 - Products
 - Tickets
 
-The package has no functionality (yet) to update information in HubSpot (`POST` and `PUT`).
+The package also supports the following `GET`, `POST`, `PUT` and `DELETE` endpoints of the API v3:
+- Products
+
 
 ## Example
 
@@ -1086,34 +1096,20 @@ The Hubspot API accepts authorization via
 
   - OAuth 2.0.
 
-OAuth 2.0 is the [recommended
-method](https://legacydocs.hubspot.com/docs/methods/auth/oauth-overview).
-However, this package supports both.
+OAuth 2.0 is the [recommended method](https://legacydocs.hubspot.com/docs/methods/auth/oauth-overview). However, this package supports both.
 
-Note that if you do nothing the package will use the “demo” API token
-but this won’t give you access to your own Hubspot data. So you’ll need
-to spend a little time on setup:
+Note that if you do nothing the package will use the “demo” API token but this won’t give you access to your own Hubspot data. So you’ll need to spend a little time on setup:
 
-  - For rapid prototyping key, use a Hubspot API key, see
-    `hubspot_key_set()`.
+  - For rapid prototyping key, use a Hubspot API key, see `hubspot_key_set()`.
 
-  - For more secure use, without a daily limit on API calls, see
-    `hubspot_token_create()` to create a Hubspot authorization token
-    (OAuth 2.0).
+  - For more secure use, without a daily limit on API calls, see `hubspot_token_create()` to create a Hubspot authorization token (OAuth 2.0).
 
-If you have both saved an API key via `hubspot_key_set()` and a token
-via `hubspot_token_create()`, priority will be given to using the OAuth
-2.0 token. If you don’t want that, explicitely pass `NULL` as value for
-the `token_path` argument of all functions.
+If you have both saved an API key via `hubspot_key_set()` and a token via `hubspot_token_create()`, priority will be given to using the OAuth 2.0 token. If you don’t want that, explicitely pass `NULL` as value for the `token_path` argument of all functions.
 
-Find more details on each method [in lockedata's vignette about
-authorization](https://itsalocke.com/hubspot/articles/auth).
+Find more details on each method [in lockedata's vignette about authorization](https://itsalocke.com/hubspot/articles/auth).
 
 ## Contributions welcome\!
 
-If you like to report a bug or suggest a feature, feel free to submit an
-issue at the [issue tab](https://github.com/DoubleYouGTT/hubspot/issues).
+If you like to report a bug or suggest a feature, feel free to submit an issue at the [issue tab](https://github.com/DoubleYouGTT/hubspot/issues).
 
-Please note that this project is released with a [Contributor Code of
-Conduct](CONDUCT.md). By participating in this project you agree to
-abide by its terms.
+Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.

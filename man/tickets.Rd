@@ -8,8 +8,8 @@
 hs_tickets_raw(
   token_path = hubspot_token_get(),
   apikey = hubspot_key_get(),
-  properties = hs_object_properties_tidy(hs_object_properties_raw("tickets", token_path
-    = token_path, apikey = apikey)),
+  properties = hs_object_properties_tidy("tickets", hs_object_properties_raw("tickets",
+    token_path = token_path, apikey = apikey)),
   property_history = "true",
   max_iter = 10,
   max_properties = 100,
