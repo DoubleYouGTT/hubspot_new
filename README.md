@@ -54,7 +54,7 @@ A full list of all functions and their parameters can be found in the "[hubspot.
 - Products
 - Tickets
 
-The package also supports the following `GET`, `POST`, `PUT` and `DELETE` endpoints of the API v3:
+The package also supports the following `GET`, `POST`, `PUT`, `PATCH` and `DELETE` endpoints of the API v3:
 - Products
 
 

@@ -1,7 +1,7 @@
 Package: hubspot
 Title: Work with HubSpot data
-Version: 0.3.3
-Date: 2021-08-25
+Version: 0.3.4
+Date: 2021-08-30
 Authors@R: 
     c(person(given = "Joost",
              family = "Kuckartz",

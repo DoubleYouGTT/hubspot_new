@@ -56,13 +56,7 @@ hs_get_product_list  <- function(token_path = hubspot_token_get(),
     offset_initial = offsetvalue
   )
 
-  if (!is.null(res)) {
-    res=purrr::set_names(
-      res,
-      as.double(purrr::map(res, "id"))
-    )
-  }
-  res
+  map_results(res,mapname="id",element=NULL)
 }
 
 
@@ -117,13 +111,14 @@ hs_create_product <- function(properties,
   } else {                                                  #multiple objects
     query=list(inputs=lapply(properties, function(x) { list(properties=x) }))
     
-    send_results(
+    res=send_results(
       path = "/crm/v3/objects/products/batch/create",
       apikey = apikey,
       token_path = token_path,
       body = query,
       sendfunction=httr::POST
     )
+    map_results(res,mapname="id",element="results")
   }
 }
 
@@ -182,13 +177,14 @@ hs_get_product <- function(identifiers,
     query=list(properties=properties,
                inputs=lapply(identifiers, function(x) { list(id=x) }))
     
-    send_results(
+    res=send_results(
       path = "/crm/v3/objects/products/batch/read",
       body = query,
       token_path = token_path,
       apikey = apikey,
       sendfunction = httr::POST
     )
+    map_results(res,mapname="id",element="results")
   }
 }
 
@@ -226,7 +222,10 @@ hs_update_product <- function(identifiers,
                               properties,
                               token_path = hubspot_token_get(),
                               apikey = hubspot_key_get()) {
-  
+
+  if (length(identifiers)!=length(properties)) {
+    stop("Length of identifiers and properties are not equal!")
+  }
   if (length(identifiers)==1) {                               #single object
     query <- c(
       list(
@@ -235,27 +234,58 @@ hs_update_product <- function(identifiers,
     )
     
     send_results(
-      path = paste0("/crm/v3/objects/products/",identifier),
+      path = paste0("/crm/v3/objects/products/",identifiers),
       body = query,
       token_path = token_path,
       apikey = apikey,
       sendfunction = httr::PATCH
     )
   } else {                                                    #multiple objects
-    query=lapply(properties, function(x) { list(properties=x) })
-    for (i in 1:length(identifiers)) {
-      query[[i]]$id=identifiers[i]
+    #original
+    # query=lapply(properties, function(x) { list(properties=x) })
+    # for (i in 1:length(identifiers)) {
+    #   query[[i]]$id=identifiers[i]
+    # }
+    # query=list(inputs=query)
+    # 
+    # res=send_results(
+    #   path = "/crm/v3/objects/products/batch/update",
+    #   body = query,
+    #   token_path = token_path,
+    #   apikey = apikey,
+    #   sendfunction = httr::POST
+    # )
+    # map_results(res,mapname="id",element="results")
+    #end original
+    
+    results <- list()
+    idchunks=chunk(identifiers, 100)
+    propchunks=chunk(properties, 100)
+    for (i in 1:length(idchunks)) {
+      identifiers=idchunks[[i]]
+      properties=propchunks[[i]]
+      
+      query=lapply(properties, function(x) { list(properties=x) })
+      for (i in 1:length(identifiers)) {
+        query[[i]]$id=identifiers[i]
+      }
+      query=list(inputs=query)
+      
+      res=send_results(
+        path = "/crm/v3/objects/products/batch/update",
+        body = query,
+        token_path = token_path,
+        apikey = apikey,
+        sendfunction = httr::POST
+      )
+      if (!is.null(res)) {                                    #can't access data when no content returned
+        if (!is.na(res[1])) {
+          results[i] <- list(res[["results"]])
+        }
+      }
     }
-    query=list(inputs=query)
-    
-    send_results(
-      path = "/crm/v3/objects/products/batch/update",
-      body = query,
-      token_path = token_path,
-      apikey = apikey,
-      sendfunction = httr::POST
-    )
-    
+    results <- purrr::flatten(results)
+    map_results(results,mapname="id")
   }
 }
 
@@ -347,6 +377,8 @@ hs_get_product_association  <- function(identifier,
                                         max_properties = 100,
                                         offsetvalue = 0) {
   
+  associationname=get_object_name(association_objecttype,token_path,apikey)
+  
   query <- c(
     list(
       limit = 500
@@ -354,7 +386,7 @@ hs_get_product_association  <- function(identifier,
   )
   
   res <- get_results_paged(
-    path = paste0("/crm/v3/objects/products/",identifier,"/associations/",association_objecttype),
+    path = paste0("/crm/v3/objects/products/",identifier,"/associations/",associationname),
     max_iter = max_iter,
     query = query,
     token_path = token_path,
@@ -366,13 +398,7 @@ hs_get_product_association  <- function(identifier,
     offset_initial = offsetvalue
   )
   
-  if (!is.null(res)) {
-    res=purrr::set_names(
-      res,
-      as.double(purrr::map(res, "id"))
-    )
-  }
-  res
+  map_results(res,mapname="id",element=NULL)
 }
 
 #' Product create association (single)
@@ -405,8 +431,11 @@ hs_create_product_association <- function(identifier,
                                           association_type,
                                           token_path = hubspot_token_get(),
                                           apikey = hubspot_key_get()) {
+  
+  associationname=get_object_name(association_objecttype,token_path,apikey)
+  
   send_results(
-    path = paste0("/crm/v3/objects/products/",identifier,"/associations/",association_objecttype,"/",association_identifier,"/",association_type),
+    path = paste0("/crm/v3/objects/products/",identifier,"/associations/",associationname,"/",association_identifier,"/",association_type),
     body = NULL,
     apikey = apikey,
     token_path = token_path,
@@ -445,8 +474,10 @@ hs_delete_product_association <- function(identifier,
                                           token_path = hubspot_token_get(),
                                           apikey = hubspot_key_get()) {
   
+  associationname=get_object_name(association_objecttype,token_path,apikey)
+  
   send_results(
-    path = paste0("/crm/v3/objects/products/",identifier,"/associations/",association_objecttype,"/",association_identifier,"/",association_type),
+    path = paste0("/crm/v3/objects/products/",identifier,"/associations/",associationname,"/",association_identifier,"/",association_type),
     body = NULL,
     token_path = token_path,
     apikey = apikey,

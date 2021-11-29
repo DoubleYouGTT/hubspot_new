@@ -21,12 +21,12 @@ is \code{NULL}). See \code{\link[=hubspot_key_set]{hubspot_key_set()}}.}
 }
 \value{
 This function always returns the same, an empty \code{raw} object.
-If an incorrect identifier is provided, no warning or error will be given.
+If an incorrect input is provided, no warning or error will be given.
 
-To see if an object is properly deleted, use \code{hs_get_\emph{xxx}} to obtain
-the object with the same identifier (it should return \code{NULL}),
-or use \code{hs_get_\emph{xxx}_list} to obtain multiple objects
-with the same identifiers (it should return an empty list).
+To see if an object/schema is properly deleted, use \code{hs_get_\emph{xxx}} to obtain
+the same object/schema or use \code{hs_get_\emph{xxx}_list} to obtain
+multiple objects. If the returning information does not contain the
+object/schema, it is deleted correctly.
 }
 \description{
 Delete one or multiple products.

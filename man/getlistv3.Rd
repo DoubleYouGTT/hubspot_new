@@ -34,7 +34,7 @@ properties returned, if required.}
 \value{
 List with object data, \code{NULL} in case
 no object was found (error 404), or \code{NA} if there was an
-internal server error (error 500). All error codes will display a warning.
+internal server error (error 500). All server error codes will display a warning.
 }
 \description{
 Get a list of products.

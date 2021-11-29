@@ -18,9 +18,8 @@ hs_get_product_association(
 \arguments{
 \item{identifier}{The object identifier (either \code{vid} or \code{id}) of the related object.}
 
-\item{association_objecttype}{String name of the object type of the association.
-Can be any of the default HubSpot objects (\code{contact}, \code{company}, \code{deal}, \code{ticket}, \code{line_item},
-\code{product}, \code{quote}, or a custom created object).}
+\item{association_objecttype}{The object identifier (\code{objectTypeId}) or unique name of the object
+to associate with.}
 
 \item{token_path}{Path to OAuth 2.0 token.
 See \code{\link[=hubspot_token_create]{hubspot_token_create()}}.}
@@ -38,8 +37,8 @@ properties returned, if required.}
 }
 \value{
 List with association data or \code{NULL} in case
-no object was found (error 404). A warning for error 404
-will also be displayed.
+no object was found (error 404), or \code{NA} if there was an
+internal server error (error 500). All server error codes will display a warning.
 }
 \description{
 Get a list of associations a single product has.
