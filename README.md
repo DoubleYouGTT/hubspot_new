@@ -36,27 +36,30 @@ The new (API v3) functions are named following the `hs_<action>_<endpoint>_<type
 
 > For example, a nested list of products data can be obtained with `hs_get_product_list()`, but also with `hs_get_product()` if identifiers are known.
 
-A full list of all functions and their parameters can be found in the "[hubspot.pdf](hubspot.pdf)" file. The package currently support the following `GET` endpoints of the legacy API v1:
+A full list of all functions and their parameters can be found in the "[hubspot.pdf](hubspot.pdf)" file. The package uses the following `GET` endpoints of the legacy API v1:
 - API usage
 - Companies
-- Company properties
 - Contacts
 - Contact lists
-- Contact properties
 - Deals
 - Deal pipelines
-- Deal properties
 - Engagements
 - Forms
 - Line items
-- Object properties (for tickets, products, and line items)
 - Owners
 - Products
 - Tickets
 
-The package also supports the following `GET`, `POST`, `PUT`, `PATCH` and `DELETE` endpoints of the API v3:
-- Products
+The package uses the following `GET` endpoints of the API v2:
+- Object properties (for all HubSpot and custom objects)
 
+The package uses the following `GET`, `POST`, `PUT`, `PATCH` and `DELETE` endpoints of the API v3:
+- Companies
+- Contacts
+- Deals
+- Line items
+- Products
+- Tickets
 
 ## Example
 
@@ -1069,10 +1072,10 @@ list()
 deal_stages <- hs_deals_tidy(deals, view = "properties")
 deal_stages
 #> # A tibble: 1 x 25
-#>   dealId hs_closed_amoun… dealname hs_all_accessib… amount closedate          
+#>   dealId hs_closed_amoun. dealname hs_all_accessib. amount closedate          
 #>    <dbl>            <dbl> <chr>    <chr>             <dbl> <dttm>             
-#> 1 9.32e8                0 Example… ""                  100 2019-08-02 23:58:38
-#> # … with 19 more variables: num_associated_contacts <dbl>,
+#> 1 9.32e8                0 Example. ""                  100 2019-08-02 23:58:38
+#> # . with 19 more variables: num_associated_contacts <dbl>,
 #> #   hs_all_team_ids <chr>, createdate <dttm>, hs_is_closed <chr>,
 #> #   amount_in_home_currency <dbl>, hs_deal_stage_probability <dbl>,
 #> #   days_to_close <dbl>, pipeline <chr>, hubspot_team_id <chr>,
@@ -1098,13 +1101,13 @@ The Hubspot API accepts authorization via
 
 OAuth 2.0 is the [recommended method](https://legacydocs.hubspot.com/docs/methods/auth/oauth-overview). However, this package supports both.
 
-Note that if you do nothing the package will use the “demo” API token but this won’t give you access to your own Hubspot data. So you’ll need to spend a little time on setup:
+Note that if you do nothing the package will use the "demo"" API token but this won't give you access to your own Hubspot data. So you'll need to spend a little time on setup:
 
   - For rapid prototyping key, use a Hubspot API key, see `hubspot_key_set()`.
 
   - For more secure use, without a daily limit on API calls, see `hubspot_token_create()` to create a Hubspot authorization token (OAuth 2.0).
 
-If you have both saved an API key via `hubspot_key_set()` and a token via `hubspot_token_create()`, priority will be given to using the OAuth 2.0 token. If you don’t want that, explicitely pass `NULL` as value for the `token_path` argument of all functions.
+If you have both saved an API key via `hubspot_key_set()` and a token via `hubspot_token_create()`, priority will be given to using the OAuth 2.0 token. If you don't want that, explicitly pass `NULL` as value for the `token_path` argument of all functions.
 
 Find more details on each method [in lockedata's vignette about authorization](https://itsalocke.com/hubspot/articles/auth).
 

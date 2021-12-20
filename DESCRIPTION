@@ -1,43 +1,28 @@
 Package: hubspot
 Title: Work with HubSpot data
-Version: 0.3.4
-Date: 2021-08-30
-Authors@R: 
-    c(person(given = "Joost",
-             family = "Kuckartz",
-             role = c("aut", "cph", "cre"),
-             email = "jkuckartz1984@hotmail.com"),
-      person(given = "Steph",
-             family = "Locke",
-             role = c("aut", "cph"),
-             email = "steph@itsalocke.com"),
-      person(given = "Jessie",
-             family = "Geahlen",
-             role = "ctb",
-             email = "jgeahlen@gmail.com"),
-      person(given = "Locke Data",
-             role = "fnd",
-             comment = "https://itsalocke.com"),
-      person(given = "Maëlle",
-             family = "Salmon",
-             role = "aut",
-             email = "maelle.salmon@yahoo.se",
-             comment = c(ORCID = "0000-0002-2815-0399")),
-      person(given = "Michael W.",
-             family = "Kearney",
-             role = "ctb",
-             email = "kearneymw@missouri.edu",
-             comment = c(ORCID = "0000-0002-0730-4694")))
+Version: 0.3.6
+Date: 2021-12-20
+Authors@R: c(
+    person("Joost", "Kuckartz", , "jkuckartz1984@hotmail.com", role = c("aut", "cph", "cre")),
+    person("Steph", "Locke", , "steph@itsalocke.com", role = c("aut", "cph")),
+    person("Jessie", "Geahlen", , "jgeahlen@gmail.com", role = "ctb"),
+    person("Locke Data", role = "fnd",
+           comment = "https://itsalocke.com"),
+    person("Maëlle", "Salmon", , "maelle.salmon@yahoo.se", role = "aut",
+           comment = c(ORCID = "0000-0002-2815-0399")),
+    person("Michael W.", "Kearney", , "kearneymw@missouri.edu", role = "ctb",
+           comment = c(ORCID = "0000-0002-0730-4694"))
+  )
 Description: Utilising the 'Hubspot CRM' API (see
     <https://developers.hubspot.com/docs> for more information), retrieve
     customer relationship data for reporting and analysis.
 License: MIT+ file LICENSE
 Depends: 
-    R (>= 4.1.0)
+    R (>= 4.1.2)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Imports: 
     httr,
     dplyr,

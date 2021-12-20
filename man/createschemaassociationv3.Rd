@@ -15,7 +15,8 @@ hs_create_schema_association(
 \item{object}{The object identifier (\code{objectTypeId}) or unique name of the object.}
 
 \item{association_objecttype}{The object identifier (\code{objectTypeId}) or unique name of the object
-to associate with.}
+to associate with. In case the name is provided, it is always the singular version of the
+HubSpot object (contrary to the \code{objecttype} property).}
 
 \item{association_type}{Unique string name for the new association type.
 Common association types follow the \code{"object_to_object"} string format.
@@ -33,6 +34,10 @@ is \code{NULL}). See \code{\link[=hubspot_key_set]{hubspot_key_set()}}.}
 List with association data or \code{NULL} in case
 no object was found (error 404), or \code{NA} if there was an
 internal server error (error 500). All server error codes will display a warning.
+
+The returned list of association data won't always be the same length
+as the provided identifiers. Identifiers that do not have associations
+are excluded from the returned list.
 }
 \description{
 Associate a schema with another object.

@@ -31,7 +31,7 @@ Save the API key on your machine using the \code{hubspot_key_set()} function,
 that relies on the \code{keyring} package that stores the key in the system
 default credential store (see \code{keyring} docs). If you don’t do that,
 you’ll have to provide the API key as argument to \code{hubspot} functions
-calling Hubspot APIs.\if{html}{\out{<div class="r">}}\preformatted{# Either input the key as parameter
+calling Hubspot APIs.\if{html}{\out{<div class="sourceCode r">}}\preformatted{# Either input the key as parameter
 hubspot_key_set("yourapikey")
 
 # Or just call the function,
@@ -45,7 +45,7 @@ give you access to your own Hubspot data.
 
 You can check the daily usage related to the API key via
 \code{hubspot_api_usage()}. Calls in the package are rate limited (100
-requests every 10 seconds) but there’s also a daily limit on calls.\if{html}{\out{<div class="r">}}\preformatted{hubspot_api_usage()
+requests every 10 seconds) but there’s also a daily limit on calls.\if{html}{\out{<div class="sourceCode r">}}\preformatted{hubspot_api_usage()
 }\if{html}{\out{</div>}}
 
 \strong{For a more secure authorization method, without a daily limit on

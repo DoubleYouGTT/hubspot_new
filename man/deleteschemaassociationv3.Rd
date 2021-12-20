@@ -14,19 +14,18 @@ hs_delete_schema_association(
 \item{object}{The object identifier (\code{objectTypeId}) or unique name of the object.}
 
 \item{association_objecttype}{The object identifier (\code{objectTypeId}) or unique name of the object
-to associate with.}
+to associate with. In case the name is provided, it is always the singular version of the
+HubSpot object (contrary to the \code{objecttype} property).}
 
 \item{apikey}{API key to work with Hubspot (only used if \code{token_path}
 is \code{NULL}). See \code{\link[=hubspot_key_set]{hubspot_key_set()}}.}
-
-\item{association_identifier}{The object identifier (either \code{vid} or \code{id}) to associate the main object to.}
 }
 \value{
 This function always returns the same, an empty \code{raw} object.
 If an incorrect input is provided, no warning or error will be given.
 Obtain the association using the get association function (function \code{hs_get_\emph{xxx}_association})
 with the same input to this function to see if it was properly deleted
-(the returning association list would not have the \code{association_identifier} listed anymore).
+(the returning association list would not have the \code{identifiers_to} listed anymore).
 }
 \description{
 Remove an association between the schema and another object.
@@ -34,10 +33,8 @@ Remove an association between the schema and another object.
 \examples{
 \dontrun{
 result <- hs_delete_schema_association(
-  identifier = 1,
-  association_objecttype = "contact",
-  association_identifier = 25,
-  association_type = "schema_to_contact"
+  object = "car",
+  association_objecttype = "contact"
 )
 }
 }

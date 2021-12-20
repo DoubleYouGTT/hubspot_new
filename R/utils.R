@@ -21,6 +21,15 @@ get_path_url <- function(path) {
 #' @noRd
 chunk <- function(x,n) split(x, ceiling(seq_along(x)/n))
 
+#' Get maximum supported batch size.
+#' @param objecttype The object type to get batch size for.
+#' @return Integer amount of batch size.
+#' @noRd
+getchunksize <- function(objecttype) {
+  if (objecttype=="contacts") return(10)
+  return(100)
+}
+
 #' @param name The (plain) name of the object (character)
 #' @param apikey API key (character)
 #' @param token_path Path to cached token (character)
@@ -33,7 +42,7 @@ get_object_name <- function(name,
   if (grepl("\\d", name))
     return(name)
   #check if name is part of common ones
-  if (name %in% c("contact","company","deal","ticket","product"))
+  if (name %in% c("contact","company","deal","ticket","product","line_item","quote"))
     return(name)
   #if not, make it the fully qualified name (custom object)
   return(paste0("p",hubspot_portalid(token_path=token_path,apikey=apikey),"_",name))
@@ -59,7 +68,7 @@ get_object_name <- function(name,
     query$hapikey <- auth$value
     res <- httr::GET(get_path_url(path),
       query = query,
-      httr::user_agent("hubspot R package by DoubleYoUGTT")
+      httr::user_agent("hubspot R package by DoubleYouGTT")
     )
   } else {
     token <- readRDS(auth$value)
@@ -68,12 +77,13 @@ get_object_name <- function(name,
 
     res <- httr::GET(get_path_url(path),
       query = query,
-      httr::config(httr::user_agent("hubspot R package by DoubleYoUGTT"),
+      httr::config(httr::user_agent("hubspot R package by DoubleYouGTT"),
         token = token
       )
     )
   }
   httr::warn_for_status(res)
+  
   if (res$status_code==404) {
     return(NULL)
   } else if (res$status_code==500) {
@@ -112,7 +122,8 @@ get_results_paged <- function(path, token_path, apikey, query = NULL,
   offset <- offset_initial
   
   while (do & n < max_iter) {
-    query[[offset_name_in]] <- offset
+    if (offset!=0)
+      query[[offset_name_in]] <- offset
     
     res_content <- get_results(
       path = path,
@@ -125,8 +136,13 @@ get_results_paged <- function(path, token_path, apikey, query = NULL,
         n <- n + 1
         
         results[n] <- list(res_content[[element]])
-        do <- res_content[[hasmore_name]]
-        offset <- res_content[[offset_name_out]]
+        if (!is.null(res_content[["paging"]])) {            #this is for api v3
+          offset <- res_content[["paging"]][["next"]][["after"]]
+          do = !is.null(offset)
+        } else {                                            #this is for api v1
+          do <- res_content[[hasmore_name]]
+          offset <- res_content[[offset_name_out]]
+        }
         
         if (is.null(do))
           do=FALSE
@@ -184,14 +200,29 @@ get_results_paged <- function(path, token_path, apikey, query = NULL,
                         )
     )
   }
-  httr::warn_for_status(res)
-  res %>% httr::content()
+  #httr::stop_for_status(res)
+  hubspot_errorhandling(res)
+  res=httr::content(res)
+  return(res)
 }
 
 send_results <- ratelimitr::limit_rate(
   .send_results,
   ratelimitr::rate(100, 10)
 )
+
+#' @param callres Result of a HubSpot API call
+#' @noRd
+hubspot_errorhandling <- function(callres) {
+  httpcontent=httr::content(callres)
+  #extracted from #httr::stop_for_status(res)
+  if (httr::status_code(callres) < 300) {
+    return(invisible(callres))
+  }
+  if (httpcontent$status=="error") {
+    stop(httpcontent$category," (HTTP ",httr::status_code(callres),"): ",httpcontent$message, call. = FALSE)
+  }
+}
 
 #' @param rawresults Resulting list from a call to \code{get_results} or \code{send_results}
 #' @param mapname Element that constitutes the mapping to list names (character)

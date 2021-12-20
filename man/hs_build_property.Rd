@@ -29,12 +29,14 @@ Cannot contain spaces and is commonly lowercase letters and underscores only.}
 
 \item{field_type}{The method how the property appears in HubSpot or on a form.
 If provided, it must match the provided \code{type}:
+\itemize{
 \item{\code{type}=\code{enumeration}}{This field can only be either of \code{select}, \code{checkbox}, or \code{radio}.}
 \item{\code{type}=\code{date}}{This field can only be \code{date}.}
 \item{\code{type}=\code{datetime}}{This field can only be \code{date}.}
 \item{\code{type}=\code{string}}{This field can only be either of \code{text}, \code{textarea}, or \code{file}.}
 \item{\code{type}=\code{number}}{This field can only be \code{number}.}
 \item{\code{type}=\code{bool}}{This field can only be \code{booleancheckbox}.}
+}
 If this parameter is not provided (\code{NULL}) or the \code{type} only supports one \code{field_type},
 it will take the first value mentioned in the list above.}
 

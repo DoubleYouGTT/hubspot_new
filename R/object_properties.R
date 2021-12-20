@@ -2,7 +2,7 @@
 #'
 #' Retrieve raw and tidy results from [the object properties endpoint](https://legacydocs.hubspot.com/docs/methods/crm-properties/get-properties).
 #'
-#' @template objectname
+#' @template objecttype
 #' @template token_path
 #' @template apikey
 #' @rdname object-properties
@@ -11,19 +11,19 @@
 #' @examples
 #' properties <- hs_object_properties_raw("tickets")
 #' property_names <- hs_object_properties_tidy("tickets", properties, view = "names")
-hs_object_properties_raw <- function(objectname,
+hs_object_properties_raw <- function(objecttype,
                                       token_path = hubspot_token_get(),
                                       apikey = hubspot_key_get()) {
 
   get_results(
-    path = paste0("/properties/v2/",objectname,"/properties"),
+    path = paste0("/properties/v2/",objecttype,"/properties"),
     apikey = apikey,
     token_path = token_path
   )
 }
 
 # tidiers ---------------------------------------------------------
-#' @template objectname
+#' @template objecttype
 #' @template object_properties
 #' @template view
 #' @details
@@ -36,14 +36,14 @@ hs_object_properties_raw <- function(objectname,
 #' @export
 #'
 #' @rdname object-properties
-hs_object_properties_tidy <- function(objectname,
+hs_object_properties_tidy <- function(objecttype,
                                        object_properties = NULL,
                                        view = "names") {
 
   view <- match.arg(view, c("names"))
 
   if(is.null(object_properties))
-    object_properties=hs_object_properties_raw(objectname)
+    object_properties=hs_object_properties_raw(objecttype)
   
   switch(view,
          "names" = .object_properties_names(object_properties))

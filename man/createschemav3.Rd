@@ -84,7 +84,7 @@ qualified name using the \code{portal_id}.
 To make either the \code{objectTypeId} or fully qualified name yourself, you can store the
 returned identifier after creation of a custom object to make the \code{objectTypeId}
 or you can use the \code{portal_id} and the name used in its creation.
-The \code{portal_id} can be obtained through \code{\link{hs_account_details()[["portalId"]]}}
+The \code{portal_id} can be obtained through \code{\link{hs_account_details()}[["portalId"]]}.
 }
 \examples{
 \dontrun{
