@@ -42,4 +42,5 @@ Suggests:
     knitr,
     testthat (>= 2.1.0),
     covr,
-    pkgload
+    pkgload,
+    vcr
