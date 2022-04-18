@@ -16,9 +16,6 @@ See \code{\link[=hubspot_token_create]{hubspot_token_create()}}.}
 \item{apikey}{API key to work with Hubspot (only used if \code{token_path}
 is \code{NULL}). See \code{\link[=hubspot_key_set]{hubspot_key_set()}}.}
 }
-\value{
-
-}
 \description{
 Get the account details for the API key or OAuth token.
 }
