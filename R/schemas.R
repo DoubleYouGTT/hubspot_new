@@ -13,14 +13,14 @@
 #' schemas <- hs_get_schema_list()
 hs_get_schema_list  <- function(token_path = hubspot_token_get(),
                                 apikey = hubspot_key_get()) {
-  
+
   res <- get_results(
     path = "/crm/v3/schemas",
     query = NULL,
     token_path = token_path,
     apikey = apikey
   )
-  
+
   map_results(res,mapname="name",element=NULL)
 }
 
@@ -44,30 +44,30 @@ hs_get_schema <- function(object,
 }
 
 #' Schema (custom object) create
-#' 
+#'
 #' Define a new custom object schema, along with its properties and associations.
 #' @template onlyapi
-#' 
-#' @details 
+#'
+#' @details
 #' When a new custom object is created, the HubSpot API requires you to refer to it
 #' through its \code{objectTypeId} or its fully qualified name.
 #' The \code{objectTypeId} is defined as \code{{meta-type}-{object_type_id}},
 #' where the meta-type is always 2 (portal-specific).
 #' The fully qualified name is defined as \code{p{portal_id}_{object_name}}.
-#' 
+#'
 #' The functions in this package use an automatic detection system that automatically
-#' transform a custom object name (without numerals) to the fully qualified name. 
-#' When it detects numerals in its object name, it assumes either an \code{objectTypeId} 
-#' or fully qualified name is provided and does not transform it to a fully 
+#' transform a custom object name (without numerals) to the fully qualified name.
+#' When it detects numerals in its object name, it assumes either an \code{objectTypeId}
+#' or fully qualified name is provided and does not transform it to a fully
 #' qualified name using the \code{portal_id}.
-#' 
-#' To make either the \code{objectTypeId} or fully qualified name yourself, you can store the 
+#'
+#' To make either the \code{objectTypeId} or fully qualified name yourself, you can store the
 #' returned identifier after creation of a custom object to make the \code{objectTypeId}
-#' or you can use the \code{portal_id} and the name used in its creation. 
+#' or you can use the \code{portal_id} and the name used in its creation.
 #' The \code{portal_id} can be obtained through \code{\link{hs_account_details}()[["portalId"]]}.
-#' 
+#'
 #' @template endpointv3schema
-#' 
+#'
 #' @param name The schema (custom object) name, using characters only (no numerals).
 #' It's common to use lower case only. Cannot be modified after creation.
 #' @param singular_label The human-readable object name (label) to use for display in its singular form.
@@ -81,7 +81,7 @@ hs_get_schema <- function(object,
 #' @template searchable_properties
 #' @param associated_objects Vector of object names to associate the custom object with.
 #' @template apikey
-#' 
+#'
 #' @template returnschema
 #' @export
 #' @rdname createschemav3
@@ -120,14 +120,14 @@ hs_create_schema <- function(name,
                              searchable_properties=NULL,
                              associated_objects,
                              apikey = hubspot_key_get()) {
-  
+
   #query preparation for JSON transformation
   query=list(
     name=name,
     labels=list(singular=singular_label,
                 plural=plural_label),
     properties=properties,
-    primaryDisplayProperty=display_properties[1],
+    primaryDisplayProperty=display_properties[1]
   )
   if (length(display_properties)>1) {
     query$secondaryDisplayProperties=display_properties[2:length(display_properties)]
@@ -149,7 +149,7 @@ hs_create_schema <- function(name,
   if (length(associated_objects)==1)
     query$associatedObjects=list(searchable_properties)
   #end query preparation
-  
+
   send_results(
     path = "/crm/v3/schemas",
     apikey = apikey,
@@ -165,11 +165,11 @@ hs_create_custom_object <- hs_create_schema
 
 
 #' Schema update
-#' 
+#'
 #' Update the details for an existing object schema.
 #' Can only update the display, required, and searchable properties.
-#' To add new properties to an object schema, use \code{\link{hs_create_property()}}.
-#' To add new associations to an object schema, use \code{\link{hs_create_schema_association()}}.
+#' To add new properties to an object schema, use \code{\link{hs_create_property}}.
+#' To add new associations to an object schema, use \code{\link{hs_create_schema_association}}.
 #' @template onlyapi
 #' @template endpointv3schema
 #'
@@ -177,6 +177,7 @@ hs_create_custom_object <- hs_create_schema
 #' @template display_properties
 #' @template required_properties
 #' @template searchable_properties
+#' @template token_path
 #' @template apikey
 #'
 #' @template returnschema
@@ -193,13 +194,14 @@ hs_update_schema <- function(object,
                              display_properties=NULL,
                              required_properties=NULL,
                              searchable_properties=NULL,
+                             token_path = hubspot_token_get(),
                              apikey = hubspot_key_get()) {
-  
+
   objecttype=get_object_name(object,token_path,apikey)
-  
+
   #build query
   query=list(
-    name=name
+    name=objecttype
   )
   if (!is.null(display_properties)) {
     query$primaryDisplayProperty=display_properties[1]
@@ -221,10 +223,10 @@ hs_update_schema <- function(object,
       query$searchable_properties=list(searchable_properties)
   }
   #end query
-  
+
   if (all(names(query)=="name"))
     return(NULL)
-  
+
   send_results(
     path = paste0("/crm/v3/objects/schemas/",objecttype),
     body = query,
@@ -236,17 +238,18 @@ hs_update_schema <- function(object,
 
 
 #' Schema delete
-#' 
-#' Delete an object schema. Deletion is only possible after all instances of 
+#'
+#' Delete an object schema. Deletion is only possible after all instances of
 #' the object has been deleted.
 #' @template onlyapi
 #' @template endpointv3schema
 #'
 #' @template object
 #' @param harddelete Logical. Set to \code{TRUE} to hard-delete the schema, so that
-#' a new custom object can be made with with the same name. Recommended to use, 
+#' a new custom object can be made with with the same name. Recommended to use,
 #' otherwise the custom object might linger around (and an account has a maximum
 #' of 10 custom objects). Default=\code{FALSE}.
+#' @template token_path
 #' @template apikey
 #'
 #' @template returndelete
@@ -260,8 +263,9 @@ hs_update_schema <- function(object,
 #' }
 hs_delete_schema <- function(object,
                              harddelete = FALSE,
+                             token_path = hubspot_token_get(),
                              apikey = hubspot_key_get()) {
-  
+
   objecttype=get_object_name(object,token_path,apikey)
 
   send_results(
@@ -277,16 +281,17 @@ hs_delete_schema <- function(object,
 
 
 #' Schema create association
-#' 
+#'
 #' Associate a schema with another object.
 #' @template onlyapi
 #' @template endpointv3schema
-#' 
+#'
 #' @template object
 #' @template association_objecttype
 #' @template association_typemake
+#' @template token_path
 #' @template apikey
-#' 
+#'
 #' @template returngetassociation
 #' @export
 #' @rdname createschemaassociationv3
@@ -300,18 +305,19 @@ hs_delete_schema <- function(object,
 hs_create_schema_association <- function(object,
                                          association_objecttype,
                                          association_type = NULL,
+                                         token_path = hubspot_token_get(),
                                          apikey = hubspot_key_get()) {
-  
+
   objecttype=get_object_name(object,token_path,apikey)
   associationname=get_object_name(association_objecttype,token_path,apikey)
-  
+
   query=list(
     fromObjectTypeId=objecttype,
-    toObjectTypeId=associationname,
+    toObjectTypeId=associationname
   )
   if (!is.null(association_type))
     query$name=association_type
-  
+
   send_results(
     path = paste0("/crm/v3/schemas/",objecttype,"/associations"),
     body = query,
@@ -322,13 +328,14 @@ hs_create_schema_association <- function(object,
 }
 
 #' schema delete association
-#' 
+#'
 #' Remove an association between the schema and another object.
 #' @template onlyapi
 #' @template endpointv3schema
 #'
 #' @template object
 #' @template association_objecttype
+#' @template token_path
 #' @template apikey
 #'
 #' @template returndeleteassociation
@@ -343,11 +350,12 @@ hs_create_schema_association <- function(object,
 #' }
 hs_delete_schema_association <- function(object,
                                          association_objecttype,
+                                         token_path = hubspot_token_get(),
                                          apikey = hubspot_key_get()) {
-  
+
   objecttype=get_object_name(object,token_path,apikey)
   associationname=get_object_name(association_objecttype,token_path,apikey)
-  
+
   send_results(
     path = paste0("/crm/v3/schemas/",objecttype,"/associations/",associationname),
     body = NULL,

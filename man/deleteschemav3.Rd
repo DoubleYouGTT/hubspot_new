@@ -4,7 +4,12 @@
 \alias{hs_delete_schema}
 \title{Schema delete}
 \usage{
-hs_delete_schema(object, harddelete = FALSE, apikey = hubspot_key_get())
+hs_delete_schema(
+  object,
+  harddelete = FALSE,
+  token_path = hubspot_token_get(),
+  apikey = hubspot_key_get()
+)
 }
 \arguments{
 \item{object}{The object identifier (\code{objectTypeId}) or unique name of the object.}
@@ -14,6 +19,9 @@ a new custom object can be made with with the same name. Recommended to use,
 otherwise the custom object might linger around (and an account has a maximum
 of 10 custom objects). Default=\code{FALSE}.}
 
+\item{token_path}{Path to OAuth 2.0 token.
+See \code{\link[=hubspot_token_create]{hubspot_token_create()}}.}
+
 \item{apikey}{API key to work with Hubspot (only used if \code{token_path}
 is \code{NULL}). See \code{\link[=hubspot_key_set]{hubspot_key_set()}}.}
 }
@@ -21,8 +29,8 @@ is \code{NULL}). See \code{\link[=hubspot_key_set]{hubspot_key_set()}}.}
 This function always returns the same, an empty \code{raw} object.
 If an incorrect input is provided, no warning or error will be given.
 
-To see if an object/schema is properly deleted, use \code{hs_get_\emph{xxx}} to obtain
-the same object/schema or use \code{hs_get_\emph{xxx}_list} to obtain
+To see if an object/schema is properly deleted, use \code{hs_get_xxx} to obtain
+the same object/schema or use \code{hs_get_xxx_list} to obtain
 multiple objects. If the returning information does not contain the
 object/schema, it is deleted correctly.
 }

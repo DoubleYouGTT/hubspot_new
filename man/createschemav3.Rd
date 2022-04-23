@@ -40,7 +40,7 @@ Start with capital letter. Cannot be modified after creation.}
 Start with capital letter. Cannot be modified after creation.}
 
 \item{properties}{List of list containing all properties and their related property settings to create.
-Use \code{\link{hs_build_property()}} to create a set of properties.}
+Use \code{\link{hs_build_property}()} to create a set of properties.}
 
 \item{display_properties}{Vector of property names (must exist within the \code{properties} list)
 that are used as display property (like \code{"firstname"}, \code{"lastname"}, \code{"email"}
@@ -84,7 +84,7 @@ qualified name using the \code{portal_id}.
 To make either the \code{objectTypeId} or fully qualified name yourself, you can store the
 returned identifier after creation of a custom object to make the \code{objectTypeId}
 or you can use the \code{portal_id} and the name used in its creation.
-The \code{portal_id} can be obtained through \code{\link{hs_account_details()}[["portalId"]]}.
+The \code{portal_id} can be obtained through \code{\link{hs_account_details}()[["portalId"]]}.
 }
 \examples{
 \dontrun{
