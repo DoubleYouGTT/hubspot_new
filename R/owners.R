@@ -58,7 +58,7 @@ hs_owners_tidy <- function(owners = hs_owners_raw(),
 
 }
 
-.owners <- function(owners = get_owners()) {
+.owners <- function(owners = hs_owners_raw()) {
   owners %>%
     purrr::map(purrr::compact) %>%
     purrr::map_df(tibble::as_tibble) %>%

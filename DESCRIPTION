@@ -1,6 +1,6 @@
 Package: hubspot
 Title: Work with HubSpot data
-Version: 0.3.6
+Version: 0.3.6.9000
 Date: 2021-12-20
 Authors@R: c(
     person("Joost", "Kuckartz", , "jkuckartz1984@hotmail.com", role = c("aut", "cph", "cre")),
@@ -18,7 +18,7 @@ Description: Utilising the 'Hubspot CRM' API (see
     customer relationship data for reporting and analysis.
 License: MIT+ file LICENSE
 Depends: 
-    R (>= 4.1.2)
+    R (>= 4.1.0)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
@@ -42,4 +42,5 @@ Suggests:
     knitr,
     testthat (>= 2.1.0),
     covr,
-    pkgload
+    pkgload,
+    vcr

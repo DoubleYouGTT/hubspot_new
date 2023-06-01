@@ -8,6 +8,7 @@ hs_create_schema_association(
   object,
   association_objecttype,
   association_type = NULL,
+  token_path = hubspot_token_get(),
   apikey = hubspot_key_get()
 )
 }
@@ -26,6 +27,9 @@ automatically create the \code{"object_to_object"} name.
 
 For example, a new association between a Car object and a Contact object
 will be named \code{"car_to_contact"}.}
+
+\item{token_path}{Path to OAuth 2.0 token.
+See \code{\link[=hubspot_token_create]{hubspot_token_create()}}.}
 
 \item{apikey}{API key to work with Hubspot (only used if \code{token_path}
 is \code{NULL}). See \code{\link[=hubspot_key_set]{hubspot_key_set()}}.}

@@ -9,6 +9,7 @@ hs_update_schema(
   display_properties = NULL,
   required_properties = NULL,
   searchable_properties = NULL,
+  token_path = hubspot_token_get(),
   apikey = hubspot_key_get()
 )
 }
@@ -30,6 +31,9 @@ fields are needed (the Contact or Company object doesn't have any required prope
 that can be searched within. Common to be text based fields, like \code{"firstname"} or \code{"lastname"}
 for the Contact object. Leave \code{NULL} (default) if no searchable fields are needed.}
 
+\item{token_path}{Path to OAuth 2.0 token.
+See \code{\link[=hubspot_token_create]{hubspot_token_create()}}.}
+
 \item{apikey}{API key to work with Hubspot (only used if \code{token_path}
 is \code{NULL}). See \code{\link[=hubspot_key_set]{hubspot_key_set()}}.}
 }
@@ -39,8 +43,8 @@ List with created or updated schema data (similar as \code{hs_get_schema()}).
 \description{
 Update the details for an existing object schema.
 Can only update the display, required, and searchable properties.
-To add new properties to an object schema, use \code{\link{hs_create_property()}}.
-To add new associations to an object schema, use \code{\link{hs_create_schema_association()}}.
+To add new properties to an object schema, use \code{\link{hs_create_property}}.
+To add new associations to an object schema, use \code{\link{hs_create_schema_association}}.
 }
 \examples{
 \dontrun{
